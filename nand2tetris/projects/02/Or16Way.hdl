@@ -1,0 +1,15 @@
+/**
+ * 16-way Or: 
+ * out = (in[0] or in[1] or ... or in[15])
+ */
+
+CHIP Or16Way {
+    IN in[16];
+    OUT out;
+
+    PARTS:
+   // Put you code here:
+   Or8Way(in = in[0..7], out = sign1);
+   Or8Way(in = in[8..15], out = sign2);
+   Or(a = sign1, b = sign2, out = out);
+}

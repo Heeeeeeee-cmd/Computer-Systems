@@ -43,4 +43,23 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+//用Mux4Way16进行四选一操作: x, not(x), true, false;
+   Not16(in = x, out = midx);
+   Mux4Way16(a = x, b = midx, c = false, d = true, sel[0] = nx, sel[1] = zx, out = newx);                                                                                
+   Not16(in = y, out = midy);
+   Mux4Way16(a = y, b = midy, c = false, d = true, sel[0] = ny, sel[1] = zy, out = newy);
+
+   And16(a = newx, b = newy, out = ffalse);
+   Add16(a = newx, b = newy, out = ftrue);
+   Mux16(a = ffalse, b = ftrue, sel = f, out = output1);  //mux进行二选一: f = 0 或f = 1
+
+   Not16(in = output1, out = output2);
+   Mux16(a = output1, b = output2, sel = no, out = out);  //mux进行二选一: no = 0 或no = 1
+
+   Mux16(a = output1, b = output2, sel = no, out[15] = c); //利用第一位来判断是正数(0)还是负数(1);
+   Mux(a = false, b = true, sel = c, out = ng);
+
+   Mux16(a = output1, b = output2, sel = no, out = output);
+   Or16Way(in = output, out = sig);                        //Or16Way:a[0] or a[1] or a[2] ... or a[15];
+   Mux(a = true, b = false, sel = sig, out = zr);          //每一位都是0说明这个数等于0
 }
