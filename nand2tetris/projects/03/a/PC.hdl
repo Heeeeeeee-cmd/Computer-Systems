@@ -19,10 +19,11 @@ CHIP PC {
     // Put your code here:
     Add16(a = preout, b[0] = true, b[1..15] = false, out = incout); //inc
     //Inc16(in = preout, out = incout);
-    Mux16(a = preout, b = incout, sel = inc, out = tmp);  //inc 和 keep二选一
-    Mux16(a = tmp, b = in, sel = load, out = loadout); //load TF二选一
-    Mux16(a = loadout, b = false, sel = reset, out = nowout);
-
+    Mux16(a = preout, b = incout, sel = inc, out = tmp);  //inc 和 keep二选一  ->ans1
+    Mux16(a = tmp, b = in, sel = load, out = loadout); //load ans1二选一  ->ans2
+    Mux16(a = loadout, b = false, sel = reset, out = nowout); //ans2 和置0二选一 ->nowout 
+    
+    //本次的输出 作为输入到寄存器中
     Register(in = nowout, load = true, out = out, out = preout);
 
 
